@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시판수정</title>
+</head>
+<body>
+  <h3>상세</h3>
+  <form action=""  th:action="@{/boards/{id}/edit(id=${updateForm.boardId})}" method="post">
+    <div><label for="">게시판번호</label><input type="text" name="boardId" id="boardId" th:value="${updateForm.boardId}" readonly></div>
+    <div><label>제목</label>
+      <input type="text" name="title" th:value="${updateForm.title}">
+      <span id="errTitle" style="color:red;"></span>
+    </div>
+    <div><label>내용</label>
+      <input type="text" name="content" th:value="${updateForm.content}">
+      <span id="errContent" style="color:red;"></span>
+    </div>
+    <div><label>작성자</label>
+      <input type="text" name="author" th:value="${updateForm.author}">
+      <span id="errAuthor" style="color:red;"></span>
+    </div>
+    <div><label for="">작성날짜</label><input type="text" name="createdDate" th:value="${updateForm.createdDate}" readonly></div>
+    <div><label for="">수정날짜</label><input type="text" name="modifiedDate" th:value="${updateForm.modifiedDate}" readonly></div>
+    <div>
+      <button type="submit" id="btnUpdate">수정</button>
+      <button type="button" id="btnFindAll">목록</button>
+    </div>
+  </form>
+  <script type='module'>
+    const errTitle = document.getElementById('errTitle');
+    const errContent = document.getElementById('errContent');
+    const errAuthor = document.getElementById('errAuthor');
+    const btnUpdate = document.getElementById('btnUpdate');
+    const title = document.querySelector('input[name="title"]');
+    const content = document.querySelector('input[name="content"]');
+    const author = document.querySelector('input[name="author"]');
+    const frm = document.querySelector('form');
+    //저장
+  import { getBytesSize }  from '/js/common.js';
+
+  //저장
+  btnUpdate.addEventListener('click', e=>{
+    e.preventDefault();  //submit 기본 이벤트 막기
+    //유효성 체크
+    //console.log('등록버튼 클릭됨!');
+
+    //제목
+    if(title.value.length == 0){
+      console.log('제목을 입력하세요');
+      errTitle.textContent = '제목을 입력하세요';
+      title.focus();
+      return;
+    }else if( getBytesSize(title.value) > 50){
+      errTitle.textContent = '제목은 16자를 초과할수 없습니다.';
+      title.focus();
+      return;
+    }else {
+      errTitle.textContent = '';
+    }
+    //내용
+    if(content.value.length == 0){
+      console.log('내용을 입력하세요');
+      errContent.textContent = '내용을 입력하세요';
+      content.focus();
+      return;
+    }else if( getBytesSize(content.value) > 4000){
+      errContent.textContent = '내용은 1300자를 초과할수 없습니다.';
+      content.focus();
+      return;
+    }else {
+      errContent.textContent = '';
+    }
+        //작성자
+    if(author.value.length == 0){
+      console.log('작성자를 입력하세요');
+      errAuthor.textContent = '작성자를 입력하세요';
+      author.focus();
+      return;
+    }else if( getBytesSize(author.value) > 50){
+      errAuthor.textContent = '작성자는 16자를 초과할수 없습니다.';
+      author.focus();
+      return;
+    }else {
+      errAuthor.textContent = '';
+    }
+
+    frm.submit();
+
+  }, false);
+
+    //목록
+    const $btnFindAll = document.getElementById('btnFindAll');
+    $btnFindAll.addEventListener('click',e=>{
+      location.href = '/boards';    // get http://localhost:9070/boards
+    },false);
+  </script>
+</body>
+</html>
